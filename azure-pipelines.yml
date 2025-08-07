@@ -1,0 +1,35 @@
+trigger:
+- main
+
+pool:
+  name: Default
+  demands:
+    - Agent.Name -equals 901516
+
+variables:
+  TF_WORKING_DIR: .  # Change if your Terraform code is in a subfolder
+
+steps:
+
+# Install Terraform
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+# Terraform Init
+- script: |
+    cd $(TF_WORKING_DIR)
+    terraform init
+  displayName: 'Terraform Init'
+
+# Terraform Plan
+- script: |
+    cd $(TF_WORKING_DIR)
+    terraform plan
+  displayName: 'Terraform Plan'
+
+# Terraform Apply
+- script: |
+    cd $(TF_WORKING_DIR)
+    terraform apply -auto-approve
+  displayName: 'Terraform Apply'
